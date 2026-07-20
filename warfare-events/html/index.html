@@ -58,7 +58,7 @@
       radial-gradient(1200px 620px at 16% -12%, #12224e66, transparent 60%),
       radial-gradient(1000px 720px at 104% -4%, #16305f4d, transparent 55%),
       radial-gradient(900px 900px at 50% 128%, #0b1c4a3a, transparent 60%),
-      linear-gradient(180deg,#05070e,#04060c);
+      linear-gradient(180deg,rgba(5,7,14,.90),rgba(4,6,12,.93));
   }
   .scene::after{ /* vignette */
     content:""; position:fixed; inset:0; pointer-events:none;
@@ -88,12 +88,14 @@
   }
   .brand{ display:flex; align-items:center; gap:12px; padding:4px 6px 22px; }
   .brand .crest{
-    width:42px; height:42px; border-radius:12px; flex:none;
+    width:44px; height:44px; border-radius:13px; flex:none; overflow:hidden;
     display:grid; place-items:center;
-    background:radial-gradient(120% 120% at 30% 20%, #24407e, #0d1730);
+    background:radial-gradient(120% 120% at 30% 20%, #1a2c55, #0b1428);
     border:1px solid #2a3e6e;
     box-shadow:0 6px 18px -8px #0009;
   }
+  .brand .crest svg{ width:30px; height:34px; }
+  .brand .crest img{ width:100%; height:100%; object-fit:cover; }
   .brand h1{ font-size:16px; letter-spacing:.06em; margin:0; line-height:1; }
   .brand span{ font-size:9.5px; letter-spacing:.34em; color:var(--text-mute); text-transform:uppercase; }
 
@@ -147,6 +149,7 @@
     position:absolute; right:-1px; bottom:-1px; width:12px; height:12px; border-radius:50%;
     background:var(--success); border:2.5px solid #0c1428;
   }
+  .avatar img{ width:100%; height:100%; border-radius:50%; object-fit:cover; }
   .profile .who{ min-width:0; }
   .profile .who b{ display:block; font-size:13px; line-height:1.2; }
   .profile .who .role{
@@ -448,20 +451,27 @@
   @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
   :focus-visible{ outline:2px solid var(--accent-bright); outline-offset:2px; border-radius:8px; }
 </style>
+<style>#appScene{display:none}</style>
 </head>
 <body>
 
-<div class="scene">
+<div class="scene" id="appScene">
   <div class="app">
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
       <div class="brand">
-        <div class="crest" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#7d9dff" stroke-width="1.6"><path d="M12 3l7 4v5c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V7l7-4z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg>
+        <div class="crest" id="brandCrest" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M24 5l15 5.4v9.6c0 10.4-6.4 17-15 20.5C15.4 37 9 30.4 9 20V10.4L24 5z" fill="url(#cg)" stroke="#4f79ff" stroke-width="1.6"/>
+            <g stroke="#dbe6ff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21l8 5 8-5"/><path d="M16 27l8 5 8-5"/>
+            </g>
+            <defs><linearGradient id="cg" x1="9" y1="5" x2="39" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#24407e"/><stop offset="1" stop-color="#0d1730"/></linearGradient></defs>
+          </svg>
         </div>
         <div>
           <h1>MEMPHIS</h1>
-          <span>Server Events</span>
+          <span id="brandSub">Warfare Events</span>
         </div>
       </div>
 
@@ -474,10 +484,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
           <span class="lbl">Hosted by me</span>
         </button>
-        <button class="nav-item" data-view="schedule">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
-          <span class="lbl">My schedule</span>
-        </button>
       </nav>
 
       <div class="side-hint">
@@ -488,7 +494,7 @@
       <div class="spacer"></div>
 
       <div class="profile" title="Signed in with Discord">
-        <div class="avatar">TT<span class="dot"></span></div>
+        <div class="avatar" id="userAvatar">TT<span class="dot"></span></div>
         <div class="who">
           <b>Test&nbsp;Test</b>
           <span class="role">
@@ -511,7 +517,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           <span class="lbl">Post new event</span>
         </button>
-        <button class="icon-btn" title="Sign out" aria-label="Sign out">
+        <button class="icon-btn" id="signOut" title="Close panel" aria-label="Close panel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v9"/><path d="M6.4 6.4a8 8 0 1 0 11.2 0"/></svg>
         </button>
       </div>
@@ -600,7 +606,7 @@
         </div>
 
         <div class="form-foot">
-          <button class="btn-discord">
+          <button class="btn-discord" id="postBtn">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19 19 0 0 0 15.6 3l-.2.5a17 17 0 0 1 4.2 1.3 15.6 15.6 0 0 0-13.2 0A17 17 0 0 1 10.6 3.5L10.4 3A19 19 0 0 0 3.7 4.4 19.7 19.7 0 0 0 .3 17.6a19 19 0 0 0 5.8 3l.7-1.2a12.4 12.4 0 0 1-2-1l.5-.4a13.6 13.6 0 0 0 11.6 0l.5.4a12.4 12.4 0 0 1-2 1l.7 1.2a19 19 0 0 0 5.8-3 19.6 19.6 0 0 0-3.4-13.2zM8.3 14.6c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3zm7.4 0c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3z"/></svg>
             Post to Discord
           </button>
@@ -649,14 +655,21 @@
 
 <script>
 (function(){
-  // ---- category palette (kept within the blue/indigo family) ----
+  // ---- FiveM NUI bridge (falls back to a browser preview when not in-game) ----
+  var IN_NUI = typeof window.GetParentResourceName === 'function';
+  var RES = IN_NUI ? GetParentResourceName() : 'warfare-events';
+  function nui(name, data){
+    if(!IN_NUI) return Promise.resolve();
+    return fetch('https://'+RES+'/'+name, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data||{})
+    }).catch(function(){});
+  }
+
+  // ---- category palette (kept within the blue / indigo family) ----
   var CATS = {
-    Racing:    { c:'#3a6dff', ic:'flag' },
-    Social:    { c:'#5865f2', ic:'users' },
-    Sports:    { c:'#2bb3c9', ic:'trophy' },
-    Community: { c:'#6d7dff', ic:'heart' },
-    Business:  { c:'#4a63d8', ic:'brief' },
-    Music:     { c:'#7a5cff', ic:'music' }
+    Racing:{c:'#3a6dff',ic:'flag'}, Social:{c:'#5865f2',ic:'users'},
+    Sports:{c:'#2bb3c9',ic:'trophy'}, Community:{c:'#6d7dff',ic:'heart'},
+    Business:{c:'#4a63d8',ic:'brief'}, Music:{c:'#7a5cff',ic:'music'}
   };
   var ICONS = {
     flag:  '<path d="M5 21V4M5 4h11l-2 4 2 4H5" stroke-linejoin="round"/>',
@@ -666,59 +679,63 @@
     brief: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/>',
     music: '<path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="2.6"/><circle cx="16" cy="16" r="2.6"/>'
   };
-
-  function svgIcon(name, sw){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(sw||1.7)+'">'+ICONS[name]+'</svg>'; }
-
-  // ---- sample events (real, RP-flavoured content) ----
-  var EVENTS = [
-    { title:'Midnight Street Race', cat:'Racing', loc:'1024', date:'Aug 6', time:'7:00 PM', host:'Test Test', hi:'TT' },
-    { title:'Downtown Car Meet', cat:'Social', loc:'Legion Sq', date:'Aug 9', time:'9:30 PM', host:'Ravi K.', hi:'RK' },
-    { title:'Vespucci Boxing Night', cat:'Sports', loc:'Del Perro', date:'Aug 12', time:'8:00 PM', host:'Mona L.', hi:'ML' },
-    { title:'Food Drive @ Mission Row', cat:'Community', loc:'0417', date:'Aug 14', time:'2:00 PM', host:'Officer Dae', hi:'OD' },
-    { title:'Harbor Drift Session', cat:'Racing', loc:'Elysian', date:'Aug 15', time:'11:00 PM', host:'Nyx', hi:'NX' },
-    { title:'Vinewood Live Set', cat:'Music', loc:'2044', date:'Aug 18', time:'10:00 PM', host:'DJ Coil', hi:'DC' }
-  ];
-
+  function svgIcon(n,sw){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(sw||1.7)+'">'+(ICONS[n]||ICONS.users)+'</svg>'; }
   function pin(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'; }
   function cal(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>'; }
   function clock(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'; }
   function dc(){ return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19 19 0 0 0 15.6 3l-.2.5a17 17 0 0 1 4.2 1.3 15.6 15.6 0 0 0-13.2 0A17 17 0 0 1 10.6 3.5L10.4 3A19 19 0 0 0 3.7 4.4 19.7 19.7 0 0 0 .3 17.6a19 19 0 0 0 5.8 3l.7-1.2a12.4 12.4 0 0 1-2-1l.5-.4a13.6 13.6 0 0 0 11.6 0l.5.4a12.4 12.4 0 0 1-2 1l.7 1.2a19 19 0 0 0 5.8-3 19.6 19.6 0 0 0-3.4-13.2zM8.3 14.6c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3zm7.4 0c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3z"/></svg>'; }
+  function arrow(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'; }
 
-  var grid = document.getElementById('grid');
-  var activeCat = 'all';
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function initials(n){ n=(n||'').trim(); if(!n) return '—'; var p=n.split(/\s+/); return ((p[0][0]||'')+(p[1]?p[1][0]:'')).toUpperCase(); }
 
+  // ---- sample data used only for the standalone browser preview ----
+  var FALLBACK = [
+    {title:'Midnight Street Race', cat:'Racing',    loc:'1024',      date:'Aug 6, 2026',  time:'7:00 PM',  host:'Test Test',   hi:'TT'},
+    {title:'Downtown Car Meet',    cat:'Social',    loc:'Legion Sq', date:'Aug 9, 2026',  time:'9:30 PM',  host:'Ravi K.',     hi:'RK'},
+    {title:'Vespucci Boxing Night',cat:'Sports',    loc:'Del Perro', date:'Aug 12, 2026', time:'8:00 PM',  host:'Mona L.',     hi:'ML'},
+    {title:'Food Drive @ Mission Row', cat:'Community', loc:'0417',  date:'Aug 14, 2026', time:'2:00 PM',  host:'Officer Dae', hi:'OD'},
+    {title:'Harbor Drift Session', cat:'Racing',    loc:'Elysian',   date:'Aug 15, 2026', time:'11:00 PM', host:'Nyx',         hi:'NX'},
+    {title:'Vinewood Live Set',    cat:'Music',     loc:'2044',      date:'Aug 18, 2026', time:'10:00 PM', host:'DJ Coil',     hi:'DC'}
+  ];
+
+  var EVENTS = [], activeCat = 'all';
+  var grid   = document.getElementById('grid');
+  var scene  = document.getElementById('appScene');
+  var overlay= document.getElementById('overlay');
+
+  // ---- render event cards ----
   function render(){
-    var list = EVENTS.filter(function(e){ return activeCat==='all' || e.cat===activeCat; });
+    var list = EVENTS.filter(function(e){ return activeCat==='all' || (e.cat||e.category)===activeCat; });
     if(!list.length){
       grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><b>No events yet.</b><span>Be the first to post one</span></div>';
       return;
     }
     grid.innerHTML = list.map(function(e,i){
-      var meta = CATS[e.cat] || CATS.Social;
+      var cat = e.cat||e.category||'Social', meta = CATS[cat]||CATS.Social;
       return ''+
       '<article class="card" style="animation-delay:'+(i*45)+'ms">'+
         '<div class="flyer">'+
           '<div class="glow" style="background:radial-gradient(120% 120% at 28% 8%,'+meta.c+'66,#0d1730)"></div>'+
-          '<div class="cat-chip"><span class="swatch" style="background:'+meta.c+'"></span>'+e.cat+'</div>'+
+          '<div class="cat-chip"><span class="swatch" style="background:'+meta.c+'"></span>'+esc(cat)+'</div>'+
           '<div class="announced">'+dc()+'Announced</div>'+
           '<span class="big" style="color:'+meta.c+'">'+svgIcon(meta.ic,1.6)+'</span>'+
         '</div>'+
         '<div class="card-body">'+
-          '<h3>'+e.title+'</h3>'+
+          '<h3>'+esc(e.title)+'</h3>'+
           '<div class="meta">'+
-            '<div class="row">'+pin()+'<b>'+e.loc+'</b></div>'+
-            '<div class="row">'+cal()+'<span class="tnum">'+e.date+', 2026</span> &nbsp;·&nbsp; '+clock()+'<span class="tnum">'+e.time+'</span></div>'+
+            '<div class="row">'+pin()+'<b>'+esc(e.loc||e.location||'—')+'</b></div>'+
+            '<div class="row">'+cal()+'<span class="tnum">'+esc(e.date||'—')+'</span></div>'+
+            '<div class="row">'+clock()+'<span class="tnum">'+esc(e.time||'—')+'</span></div>'+
           '</div>'+
           '<div class="card-foot">'+
-            '<div class="host"><span class="mini">'+e.hi+'</span>Hosted by '+e.host+'</div>'+
+            '<div class="host"><span class="mini">'+esc(e.hi||initials(e.host))+'</span>Hosted by '+esc(e.host||'—')+'</div>'+
             '<button class="view-link">View '+arrow()+'</button>'+
           '</div>'+
         '</div>'+
       '</article>';
     }).join('');
   }
-  function arrow(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'; }
-  render();
 
   // ---- category filter ----
   document.getElementById('filters').addEventListener('click', function(ev){
@@ -728,61 +745,100 @@
     render();
   });
 
-  // ---- nav switching (visual) ----
+  // ---- sidebar nav (visual) ----
   var VIEWS = {
     discovery:{ t:'Trending Now', s:'Discover what the city is doing' },
-    hosted:   { t:'Hosted by me', s:'Events you posted to Discord' },
-    schedule: { t:'My Schedule', s:'Everything coming up next' }
+    hosted:   { t:'Hosted by me', s:'Events you posted to Discord' }
   };
   document.getElementById('nav').addEventListener('click', function(ev){
     var b = ev.target.closest('.nav-item'); if(!b) return;
     [].forEach.call(this.querySelectorAll('.nav-item'), function(n){ n.classList.toggle('active', n===b); });
-    var v = VIEWS[b.dataset.view];
+    var v = VIEWS[b.dataset.view]; if(!v) return;
     document.getElementById('viewTitle').textContent = v.t;
     document.getElementById('viewSub').textContent = v.s;
   });
 
   // ---- modal ----
-  var overlay = document.getElementById('overlay');
-  function openM(){ overlay.classList.add('open'); }
-  function closeM(){ overlay.classList.remove('open'); }
-  document.getElementById('openModal').addEventListener('click', openM);
-  document.getElementById('closeModal').addEventListener('click', closeM);
-  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeM(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeM(); });
+  function openModal(){ overlay.classList.add('open'); sync(); }
+  function closeModal(){ overlay.classList.remove('open'); }
+  document.getElementById('openModal').addEventListener('click', openModal);
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
+
+  // ---- panel show / hide ----
+  function showPanel(){ scene.style.display = 'grid'; }
+  function hidePanel(){ scene.style.display = 'none'; closeModal(); }
+  function closePanel(){ if(IN_NUI){ nui('close'); hidePanel(); } }   // in a browser preview we keep it on screen
+  document.getElementById('signOut').addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape'){ if(overlay.classList.contains('open')) closeModal(); else closePanel(); }
+  });
 
   // ---- live Discord embed preview ----
+  function val(id){ return document.getElementById(id).value.trim(); }
+  function setTxt(id,t){ document.getElementById(id).textContent = t; }
   function months(m){ return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m]; }
   function fmtDate(v){ if(!v) return '—'; var p=v.split('-'); if(p.length!==3) return v; return months(+p[1]-1)+' '+(+p[2])+', '+p[0]; }
-  function bind(id, fn){ document.getElementById(id).addEventListener('input', fn); }
-
   function sync(){
-    var title = val('f-title') || 'Event title';
-    var cat   = document.getElementById('f-cat').value;
-    var meta  = CATS[cat] || CATS.Social;
-    var loc   = val('f-loc') || '—';
-    var date  = fmtDate(val('f-date'));
-    var time  = val('f-time') || '—';
-    var desc  = val('f-desc') || 'What should people expect?';
-    var flyer = val('f-flyer');
-
-    set('e-title', title);
-    set('e-cat', cat);
-    set('e-loc', loc);
-    set('e-date', date);
-    set('e-time', time);
-    set('e-desc', desc);
+    var cat = document.getElementById('f-cat').value, meta = CATS[cat]||CATS.Social;
+    setTxt('e-title', val('f-title')||'Event title');
+    setTxt('e-cat', cat);
+    setTxt('e-loc', val('f-loc')||'—');
+    setTxt('e-date', fmtDate(val('f-date')));
+    setTxt('e-time', val('f-time')||'—');
+    setTxt('e-desc', val('f-desc')||'What should people expect?');
     document.getElementById('embed').style.borderLeftColor = meta.c;
-    var ic = document.getElementById('e-ic'); ic.style.background = meta.c;
+    document.getElementById('e-ic').style.background = meta.c;
     document.getElementById('e-glow').style.background = 'radial-gradient(120% 120% at 30% 10%,'+meta.c+'66,#0d1730)';
-    document.getElementById('e-flyer').textContent = flyer ? 'Flyer attached' : 'Flyer image';
+    document.getElementById('e-flyer').textContent = val('f-flyer') ? 'Flyer attached' : 'Flyer image';
   }
-  function val(id){ return document.getElementById(id).value.trim(); }
-  function set(id,t){ document.getElementById(id).textContent = t; }
-
-  ['f-title','f-loc','f-date','f-time','f-desc','f-flyer'].forEach(function(id){ bind(id, sync); });
+  ['f-title','f-loc','f-date','f-time','f-desc','f-flyer'].forEach(function(id){ document.getElementById(id).addEventListener('input', sync); });
   document.getElementById('f-cat').addEventListener('change', sync);
-  sync();
+
+  // ---- submit: post the event (server sends the embed to Discord) ----
+  document.getElementById('postBtn').addEventListener('click', function(){
+    var data = {
+      title:       val('f-title'),
+      category:    document.getElementById('f-cat').value,
+      flyer:       val('f-flyer'),
+      location:    val('f-loc'),
+      date:        val('f-date'),
+      time:        val('f-time'),
+      description: val('f-desc')
+    };
+    if(!data.title){ var t=document.getElementById('f-title'); t.focus(); t.style.borderColor='#ff6b6b'; return; }
+    nui('createEvent', data);
+    if(!IN_NUI){ // browser preview: reflect it locally
+      EVENTS.unshift({ title:data.title, cat:data.category, loc:data.location||'—', date:fmtDate(data.date), time:data.time||'—', host:'You', hi:'YO' });
+      render();
+    }
+    closeModal();
+  });
+
+  // ---- apply server / discord config ----
+  function applyConfig(c){
+    if(!c) return;
+    if(c.panelTitle){ var s=document.getElementById('brandSub'); if(s) s.textContent = c.panelTitle; }
+    if(c.logo){ var cr=document.getElementById('brandCrest'); if(cr) cr.innerHTML = '<img src="'+c.logo+'" alt="logo">'; }
+    if(c.user){
+      var nm = c.user.name || 'Member';
+      var pn = document.querySelector('.profile .who b'); if(pn) pn.textContent = nm;
+      var av = document.getElementById('userAvatar');
+      if(av){ av.innerHTML = (c.user.avatar ? '<img src="'+c.user.avatar+'" alt="">' : esc(initials(nm))) + '<span class="dot"></span>'; }
+    }
+  }
+
+  // ---- messages from the client script ----
+  window.addEventListener('message', function(ev){
+    var d = ev.data || {};
+    if(d.action==='open'){ applyConfig(d.config); showPanel(); nui('getEvents'); }
+    else if(d.action==='events'){ EVENTS = d.events || []; render(); }
+    else if(d.action==='close'){ hidePanel(); }
+  });
+
+  // ---- init ----
+  if(IN_NUI){ hidePanel(); }                          // in-game: stay hidden until /events
+  else { EVENTS = FALLBACK; showPanel(); render(); sync(); }   // browser: instant preview
 })();
 </script>
 
