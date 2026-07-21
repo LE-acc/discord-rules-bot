@@ -12,7 +12,7 @@ Config = {}
 Config.Command = 'events'
 
 -- Branding shown in the panel
-Config.ServerName = 'MEMPHIS'
+Config.ServerName = 'Warfare City'
 Config.PanelTitle = 'Warfare Events'
 -- Logo shown top-left. Leave '' to keep the built-in emblem, or point it at an
 -- image: an external URL, or a bundled file e.g. 'nui://warfare-events/html/logo.png'

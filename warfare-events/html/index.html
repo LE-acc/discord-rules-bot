@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MEMPHIS — Server Events (UI Mockup)</title>
+<title>Warfare City — Events (UI Mockup)</title>
 <style>
   /* ============ TOKENS — dark navy + black, Discord-forward ============ */
   :root{
@@ -68,9 +68,9 @@
   /* ============ APP PANEL ============ */
   .app{
     position:relative; z-index:1;
-    width:min(1180px,100%);
-    height:min(724px,90vh);
-    display:grid; grid-template-columns:250px 1fr;
+    width:min(1320px,97%);
+    height:min(820px,93vh);
+    display:grid; grid-template-columns:264px 1fr;
     background:linear-gradient(180deg,#0a0f1cf5,#080c17f7);
     border:1px solid var(--border);
     border-radius:22px;
@@ -212,7 +212,7 @@
   /* ============ CONTENT ============ */
   .content{ padding:24px; overflow:auto; flex:1; }
   .content-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:20px; }
-  .content-head h2{ margin:0; font-size:30px; letter-spacing:-.02em; line-height:1; text-wrap:balance; }
+  .content-head h2{ margin:0; font-size:34px; letter-spacing:-.02em; line-height:1; text-wrap:balance; }
   .content-head .sub{ margin:9px 0 0; font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--text-mute); }
 
   .filters{ display:flex; gap:8px; flex-wrap:wrap; }
@@ -225,7 +225,7 @@
   .chip.active{ color:#fff; background:linear-gradient(180deg,#1a2954,#132043); border-color:#335198; box-shadow:0 0 0 1px #3a6dff33; }
 
   /* ---- event grid ---- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:16px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(292px,1fr)); gap:18px; }
 
   .card{
     display:flex; flex-direction:column;
@@ -298,7 +298,7 @@
   }
   .overlay.open{ opacity:1; pointer-events:auto; }
   .modal{
-    width:min(920px,100%); max-height:100%;
+    width:min(1000px,100%); max-height:100%;
     display:grid; grid-template-columns:1.15fr .85fr;
     background:linear-gradient(180deg,#0c1428,#0a0f1c);
     border:1px solid var(--border); border-radius:20px; overflow:hidden;
@@ -451,7 +451,7 @@
   @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
   :focus-visible{ outline:2px solid var(--accent-bright); outline-offset:2px; border-radius:8px; }
 </style>
-<style>#appScene{display:none}</style>
+<style>html,body{background:transparent !important}#appScene{display:none}</style>
 </head>
 <body>
 
@@ -470,7 +470,7 @@
           </svg>
         </div>
         <div>
-          <h1>MEMPHIS</h1>
+          <h1 id="brandName">WARFARE CITY</h1>
           <span id="brandSub">Warfare Events</span>
         </div>
       </div>
@@ -624,13 +624,13 @@
           <div class="dc-top">
             <div class="bot"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19 19 0 0 0 15.6 3l-.2.5a17 17 0 0 1 4.2 1.3 15.6 15.6 0 0 0-13.2 0A17 17 0 0 1 10.6 3.5L10.4 3A19 19 0 0 0 3.7 4.4 19.7 19.7 0 0 0 .3 17.6a19 19 0 0 0 5.8 3l.7-1.2a12.4 12.4 0 0 1-2-1l.5-.4a13.6 13.6 0 0 0 11.6 0l.5.4a12.4 12.4 0 0 1-2 1l.7 1.2a19 19 0 0 0 5.8-3 19.6 19.6 0 0 0-3.4-13.2zM8.3 14.6c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3zm7.4 0c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3z"/></svg></div>
             <div>
-              <div class="dc-name">Memphis Events <span class="dc-tag">APP</span></div>
+              <div class="dc-name">Warfare Events <span class="dc-tag">APP</span></div>
               <div class="dc-time">Today at 3:14 PM</div>
             </div>
           </div>
 
           <div class="embed" id="embed">
-            <div class="e-author"><span class="ic" id="e-ic" style="background:#2049c9"></span><span id="e-cat">Racing</span> · Memphis Server Events</div>
+            <div class="e-author"><span class="ic" id="e-ic" style="background:#2049c9"></span><span id="e-cat">Racing</span> · Warfare City</div>
             <h4 id="e-title">Midnight Street Race</h4>
             <p class="e-desc" id="e-desc">Bring your fastest build. Rolling start from the docks, three laps through downtown. Winner takes the pot.</p>
             <div class="e-fields">
@@ -645,7 +645,7 @@
                 <span id="e-flyer">Flyer image</span>
               </div>
             </div>
-            <div class="e-foot"><span class="fdot"></span>MEMPHIS • Server Events</div>
+            <div class="e-foot"><span class="fdot"></span>Warfare City • Server Events</div>
           </div>
         </div>
       </div>
@@ -819,6 +819,7 @@
   function applyConfig(c){
     if(!c) return;
     if(c.panelTitle){ var s=document.getElementById('brandSub'); if(s) s.textContent = c.panelTitle; }
+    if(c.serverName){ var bn=document.getElementById('brandName'); if(bn) bn.textContent = c.serverName; }
     if(c.logo){ var cr=document.getElementById('brandCrest'); if(cr) cr.innerHTML = '<img src="'+c.logo+'" alt="logo">'; }
     if(c.user){
       var nm = c.user.name || 'Member';
