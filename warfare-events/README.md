@@ -15,6 +15,17 @@ No RSVP, no entry fees — creating an event = announcing it.
 - The signed-in **Discord name + avatar** show in the panel (bottom-left).
 - Recent events persist across restarts (resource KVP store).
 
+### Give / rewards (admins only)
+- A **Give** tab appears only for members with an admin Discord role (`Config.AdminRoleIds`).
+- Admin browses **every qb-inventory item** (with its real image), picks items and quantities
+  into a **prize pool**. The admin never receives items — they only assign them.
+- Pick a **winner** from the online-players list and **Deliver** — items are added straight to
+  that player's inventory (QBCore).
+- The prize pool is **saved per admin** and stays after the panel is closed/reopened (and across
+  restarts).
+- Every delivery is **logged** to Discord (admin, winner, items) and a **screenshot** of the
+  winner is captured via `screenshot-basic` and posted with the log.
+
 ## Install
 1. Drop the `warfare-events` folder into your server's `resources/`.
 2. Add to `server.cfg`:
@@ -22,13 +33,16 @@ No RSVP, no entry fees — creating an event = announcing it.
    ensure warfare-events
 
    # secrets (do not hardcode them in config.lua)
-   set warfare_bot_token "YOUR_DISCORD_BOT_TOKEN"
-   set warfare_webhook   "https://discord.com/api/webhooks/xxxx/yyyy"
+   set warfare_bot_token   "YOUR_DISCORD_BOT_TOKEN"
+   set warfare_webhook     "https://discord.com/api/webhooks/xxxx/yyyy"   # event announcements
+   set warfare_logs_webhook "https://discord.com/api/webhooks/aaaa/bbbb"  # reward logs
    ```
 3. Edit `config.lua`:
    - `Config.DiscordGuildId` → your Discord server (guild) ID.
-   - `Config.AllowedRoleIds` → the role ID(s) allowed to use the panel.
+   - `Config.AllowedRoleIds` → the role ID(s) allowed to open/post events.
+   - `Config.AdminRoleIds` → the role ID(s) allowed to use the **Give** tab.
    - `Config.Logo` → optional; your logo URL, or `nui://warfare-events/html/logo.svg`.
+4. For rewards, run **`qb-core`**, **`qb-inventory`**, and **`screenshot-basic`** on the server.
 
 ## Discord setup
 - **Webhook (embed):** Channel → Edit Channel → Integrations → Webhooks → New Webhook →

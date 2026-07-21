@@ -412,6 +412,59 @@
   .embed .e-foot{ display:flex; align-items:center; gap:8px; font-size:11px; color:#949ba4; }
   .embed .e-foot .fdot{ width:16px; height:16px; border-radius:4px; background:linear-gradient(135deg,#24407e,#0d1730); border:1px solid #2a3e6e; }
 
+  /* ============ GIVE (admin item rewards) ============ */
+  .give-grid{ display:grid; grid-template-columns:1fr 350px; gap:18px; align-items:start; }
+  .panel-card{ background:linear-gradient(180deg,#101a30,#0d1428); border:1px solid var(--border-soft); border-radius:16px; }
+  .catalog{ padding:16px; }
+  .catalog-head{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .catalog-head h3{ margin:0; font-size:15px; letter-spacing:.01em; }
+  .catalog-head .count{ font-size:11px; color:var(--text-mute); }
+  .catalog-head .search{ margin-left:auto; max-width:230px; padding:9px 12px; }
+  .items{ display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px; max-height:min(48vh,440px); overflow:auto; padding-right:4px; }
+  .item{ display:flex; flex-direction:column; align-items:center; gap:8px; padding:11px 8px; text-align:center;
+         background:var(--surface); border:1px solid var(--border-soft); border-radius:12px; cursor:pointer; transition:.15s var(--ease); }
+  .item:hover{ transform:translateY(-2px); border-color:#2b447e; box-shadow:0 12px 24px -18px #000e; }
+  .item .thumb{ width:46px; height:46px; border-radius:9px; display:grid; place-items:center; background:#0e1830; overflow:hidden; }
+  .item .thumb img{ width:100%; height:100%; object-fit:contain; }
+  .item .fallback{ width:100%; height:100%; display:grid; place-items:center; font-weight:800; font-size:16px; color:#9db4ff; background:#14203c; }
+  .item .nm{ font-size:11px; color:var(--text-dim); line-height:1.25; word-break:break-word; }
+  .item.picked{ border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+
+  .prize{ padding:16px; display:flex; flex-direction:column; gap:12px; }
+  .prize h3{ margin:0; font-size:15px; }
+  .prize .lead{ font-size:11.5px; color:var(--text-mute); margin:-6px 0 2px; line-height:1.5; }
+  .prize-list{ display:flex; flex-direction:column; gap:8px; max-height:300px; overflow:auto; }
+  .prize-row{ display:flex; align-items:center; gap:10px; padding:8px; border-radius:11px; background:var(--surface); border:1px solid var(--border-soft); }
+  .prize-row .thumb{ width:36px; height:36px; border-radius:8px; display:grid; place-items:center; background:#0e1830; overflow:hidden; flex:none; }
+  .prize-row .thumb img{ width:100%; height:100%; object-fit:contain; }
+  .prize-row .thumb .fallback{ width:100%; height:100%; display:grid; place-items:center; font-weight:800; font-size:13px; color:#9db4ff; background:#14203c; }
+  .prize-row .pl{ flex:1; min-width:0; }
+  .prize-row .pl b{ display:block; font-size:12.5px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .prize-row .pl small{ font-size:10.5px; color:var(--text-mute); }
+  .qty{ display:flex; align-items:center; gap:4px; flex:none; }
+  .qty button{ width:24px; height:24px; border-radius:7px; border:1px solid var(--border-soft); background:var(--surface-2); color:var(--text-dim); font-size:14px; line-height:1; display:grid; place-items:center; }
+  .qty button:hover{ color:#fff; border-color:var(--border); }
+  .qty input{ width:42px; text-align:center; padding:5px 2px; font-size:12.5px; color:var(--text); background:var(--surface-2); border:1px solid var(--border-soft); border-radius:7px; font-variant-numeric:tabular-nums; }
+  .prize-row .rm{ width:26px; height:26px; border-radius:7px; border:1px solid transparent; background:transparent; color:var(--text-mute); flex:none; font-size:12px; }
+  .prize-row .rm:hover{ color:#ff8a8a; background:#1a1020; border-color:#5a2a2a; }
+  .prize-empty{ text-align:center; padding:26px 12px; border:1px dashed var(--border); border-radius:12px; color:var(--text-mute); font-size:12px; line-height:1.6; }
+  .give-foot{ display:flex; flex-direction:column; gap:10px; border-top:1px solid var(--border-soft); padding-top:14px; }
+  .give-foot label{ margin-bottom:7px; }
+  .give-note{ display:flex; gap:8px; align-items:flex-start; font-size:11px; color:var(--text-mute); margin:0; line-height:1.55; }
+  .give-note svg{ width:14px; height:14px; color:var(--accent-bright); flex:none; margin-top:1px; }
+  .btn-give{ width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:13px; border-radius:12px;
+             border:1px solid #4f79ff55; color:#fff; font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+             background:linear-gradient(180deg,var(--accent),var(--accent-deep)); box-shadow:0 12px 28px -14px var(--accent-glow), inset 0 1px 0 #ffffff33; transition:.18s var(--ease); }
+  .btn-give:hover:not(:disabled){ transform:translateY(-1px); }
+  .btn-give:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .btn-give svg{ width:16px; height:16px; }
+
+  .toast{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(12px); z-index:40;
+          background:linear-gradient(180deg,#16224a,#101a38); color:#eaf0fb; border:1px solid #2a3f74;
+          padding:12px 18px; border-radius:12px; font-size:13px; box-shadow:0 20px 40px -18px #000c;
+          opacity:0; pointer-events:none; transition:.24s var(--ease); }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
   /* ============ RESPONSIVE ============ */
   @media (max-width:900px){
     .modal{ grid-template-columns:1fr; }
@@ -443,6 +496,10 @@
     .grid{ grid-template-columns:1fr; }
     .field.row2{ grid-template-columns:1fr; }
     .e-fields{ grid-template-columns:1fr; }
+    .give-grid{ grid-template-columns:1fr; }
+    .items{ max-height:none; }
+    .catalog-head{ flex-wrap:wrap; }
+    .catalog-head .search{ margin-left:0; max-width:none; width:100%; }
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -484,6 +541,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
           <span class="lbl">Hosted by me</span>
         </button>
+        <button class="nav-item" data-view="give" id="navGive" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10.5 3 8 3.5 6.5 7.5 12 8zM12 8s1.5-5 4-4.5S17.5 7.5 12 8z"/></svg>
+          <span class="lbl">Give</span>
+        </button>
       </nav>
 
       <div class="side-hint">
@@ -499,7 +560,7 @@
           <b>Test&nbsp;Test</b>
           <span class="role">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19 19 0 0 0 15.6 3l-.2.5a17 17 0 0 1 4.2 1.3 15.6 15.6 0 0 0-13.2 0A17 17 0 0 1 10.6 3.5L10.4 3A19 19 0 0 0 3.7 4.4 19.7 19.7 0 0 0 .3 17.6a19 19 0 0 0 5.8 3l.7-1.2a12.4 12.4 0 0 1-2-1l.5-.4a13.6 13.6 0 0 0 11.6 0l.5.4a12.4 12.4 0 0 1-2 1l.7 1.2a19 19 0 0 0 5.8-3 19.6 19.6 0 0 0-3.4-13.2zM8.3 14.6c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3zm7.4 0c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3z"/></svg>
-            Event Host
+            <span id="roleLabel">Event Host</span>
           </span>
         </div>
       </div>
@@ -537,6 +598,45 @@
           </div>
         </div>
         <div class="grid" id="grid"></div>
+
+        <section id="giveView" hidden>
+          <div class="give-grid">
+            <div class="panel-card catalog">
+              <div class="catalog-head">
+                <h3>Item Catalog</h3>
+                <span class="count" id="itemCount"></span>
+                <div class="search">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>
+                  <input id="itemSearch" placeholder="Search items…" aria-label="Search items">
+                </div>
+              </div>
+              <div class="items" id="itemList"></div>
+            </div>
+
+            <aside class="panel-card prize">
+              <h3>Prize Pool</h3>
+              <p class="lead">Items you pick are saved — they stay after you close the panel.</p>
+              <div class="prize-list" id="prizeList"></div>
+              <div class="give-foot">
+                <div>
+                  <label for="winnerSel">Winner</label>
+                  <div class="select-wrap">
+                    <select class="control" id="winnerSel"></select>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                  </div>
+                </div>
+                <button class="btn-give" id="deliverBtn" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/></svg>
+                  Deliver to winner
+                </button>
+                <p class="give-note">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  You only assign the reward — items go straight to the winner's inventory. A screenshot + full log is sent to Discord.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -745,17 +845,27 @@
     render();
   });
 
-  // ---- sidebar nav (visual) ----
+  // ---- sidebar nav ----
   var VIEWS = {
     discovery:{ t:'Trending Now', s:'Discover what the city is doing' },
-    hosted:   { t:'Hosted by me', s:'Events you posted to Discord' }
+    hosted:   { t:'Hosted by me', s:'Events you posted to Discord' },
+    give:     { t:'Item Rewards', s:'Assign a prize and deliver it to the winner' }
   };
+  function setView(view){
+    var give = (view==='give');
+    document.getElementById('filters').style.display = give ? 'none' : '';
+    grid.style.display = give ? 'none' : '';
+    giveView.hidden = !give;
+    document.getElementById('openModal').style.display = give ? 'none' : '';
+    if(give){ showGive(); nui('getGive'); }
+  }
   document.getElementById('nav').addEventListener('click', function(ev){
     var b = ev.target.closest('.nav-item'); if(!b) return;
-    [].forEach.call(this.querySelectorAll('.nav-item'), function(n){ n.classList.toggle('active', n===b); });
     var v = VIEWS[b.dataset.view]; if(!v) return;
+    [].forEach.call(this.querySelectorAll('.nav-item'), function(n){ n.classList.toggle('active', n===b); });
     document.getElementById('viewTitle').textContent = v.t;
     document.getElementById('viewSub').textContent = v.s;
+    setView(b.dataset.view);
   });
 
   // ---- modal ----
@@ -827,6 +937,112 @@
       var av = document.getElementById('userAvatar');
       if(av){ av.innerHTML = (c.user.avatar ? '<img src="'+c.user.avatar+'" alt="">' : esc(initials(nm))) + '<span class="dot"></span>'; }
     }
+    isAdmin = !!c.isAdmin;
+    var ng = document.getElementById('navGive'); if(ng) ng.hidden = !isAdmin;
+    var rl = document.getElementById('roleLabel'); if(rl) rl.textContent = isAdmin ? 'Admin' : 'Event Host';
+  }
+
+  // ================= GIVE (admin item rewards) =================
+  var ITEMS = [], PRIZES = [], PLAYERS = [], isAdmin = false;
+  var giveView   = document.getElementById('giveView');
+  var itemListEl = document.getElementById('itemList');
+  var prizeListEl= document.getElementById('prizeList');
+
+  var FALLBACK_ITEMS = [
+    {name:'water',label:'Water Bottle'},{name:'sandwich',label:'Sandwich'},{name:'phone',label:'Phone'},
+    {name:'lockpick',label:'Lockpick'},{name:'bandage',label:'Bandage'},{name:'radio',label:'Radio'},
+    {name:'cash',label:'Cash'},{name:'weapon_pistol',label:'Pistol'},{name:'repairkit',label:'Repair Kit'},
+    {name:'goldbar',label:'Gold Bar'},{name:'diamond',label:'Diamond'},{name:'armor',label:'Body Armor'},
+    {name:'lighter',label:'Lighter'},{name:'binoculars',label:'Binoculars'},{name:'parachute',label:'Parachute'}
+  ].map(function(x){ return { name:x.name, label:x.label, image:'' }; });
+  var FALLBACK_PLAYERS = [ {id:12,name:'Test Test'}, {id:34,name:'Ravi K.'}, {id:56,name:'Mona L.'}, {id:78,name:'Nyx'} ];
+
+  function thumbHtml(it){
+    var letter = esc((it.label||it.name||'?').charAt(0)).toUpperCase();
+    var fb = "<span class=\"fallback\">"+letter+"</span>";
+    if(it.image){ return '<img src="'+esc(it.image)+'" alt="" onerror="this.parentNode.innerHTML=&quot;'+fb.replace(/"/g,'&quot;')+'&quot;">'; }
+    return fb;
+  }
+  function renderCatalog(){
+    var q = (document.getElementById('itemSearch').value||'').toLowerCase();
+    var list = ITEMS.filter(function(it){ return !q || (it.label||'').toLowerCase().indexOf(q)>=0 || (it.name||'').toLowerCase().indexOf(q)>=0; });
+    document.getElementById('itemCount').textContent = ITEMS.length ? (list.length+' of '+ITEMS.length) : '';
+    var picked = {}; PRIZES.forEach(function(p){ picked[p.name]=true; });
+    if(!ITEMS.length){ itemListEl.innerHTML = '<div class="prize-empty" style="grid-column:1/-1">Loading items from the inventory…</div>'; return; }
+    itemListEl.innerHTML = list.slice(0,300).map(function(it){
+      return '<button class="item'+(picked[it.name]?' picked':'')+'" data-name="'+esc(it.name)+'">'+
+        '<span class="thumb">'+thumbHtml(it)+'</span>'+
+        '<span class="nm">'+esc(it.label||it.name)+'</span>'+
+      '</button>';
+    }).join('') || '<div class="prize-empty" style="grid-column:1/-1">No items match “'+esc(q)+'”.</div>';
+  }
+  function renderPrizes(){
+    var deliver = document.getElementById('deliverBtn');
+    if(!PRIZES.length){
+      prizeListEl.innerHTML = '<div class="prize-empty">No items selected yet.<br>Pick from the catalog to build the reward.</div>';
+      deliver.disabled = true; return;
+    }
+    prizeListEl.innerHTML = PRIZES.map(function(p,i){
+      return '<div class="prize-row" data-i="'+i+'">'+
+        '<span class="thumb">'+thumbHtml(p)+'</span>'+
+        '<span class="pl"><b>'+esc(p.label||p.name)+'</b><small>'+esc(p.name)+'</small></span>'+
+        '<span class="qty"><button data-act="dec" aria-label="less">−</button>'+
+          '<input type="text" inputmode="numeric" value="'+(p.amount||1)+'" data-act="qty" aria-label="quantity">'+
+          '<button data-act="inc" aria-label="more">+</button></span>'+
+        '<button class="rm" data-act="rm" title="Remove">✕</button>'+
+      '</div>';
+    }).join('');
+    deliver.disabled = false;
+  }
+  function renderWinners(){
+    var sel = document.getElementById('winnerSel');
+    sel.innerHTML = PLAYERS.length
+      ? PLAYERS.map(function(p){ return '<option value="'+esc(String(p.id))+'">'+esc(p.name)+' — ['+esc(String(p.id))+']</option>'; }).join('')
+      : '<option value="">No players online</option>';
+  }
+  function persistPrizes(){ nui('savePrizes', { prizes: PRIZES }); }
+  function addPrize(name){
+    var it=null; for(var i=0;i<ITEMS.length;i++){ if(ITEMS[i].name===name){ it=ITEMS[i]; break; } }
+    if(!it) return;
+    var ex=null; PRIZES.forEach(function(p){ if(p.name===name) ex=p; });
+    if(ex){ ex.amount=(ex.amount||1)+1; } else { PRIZES.push({ name:it.name, label:it.label, image:it.image, amount:1 }); }
+    persistPrizes(); renderPrizes(); renderCatalog();
+  }
+  itemListEl.addEventListener('click', function(e){ var b=e.target.closest('.item'); if(b) addPrize(b.dataset.name); });
+  document.getElementById('itemSearch').addEventListener('input', renderCatalog);
+  prizeListEl.addEventListener('click', function(e){
+    var btn=e.target.closest('[data-act]'); if(!btn) return;
+    var row=e.target.closest('.prize-row'); var i=+row.dataset.i; var p=PRIZES[i]; if(!p) return;
+    var act=btn.dataset.act;
+    if(act==='inc'){ p.amount=(p.amount||1)+1; }
+    else if(act==='dec'){ p.amount=Math.max(1,(p.amount||1)-1); }
+    else if(act==='rm'){ PRIZES.splice(i,1); }
+    else return;
+    persistPrizes(); renderPrizes(); renderCatalog();
+  });
+  prizeListEl.addEventListener('change', function(e){
+    var inp=e.target.closest('[data-act="qty"]'); if(!inp) return;
+    var row=e.target.closest('.prize-row'); var i=+row.dataset.i; var p=PRIZES[i]; if(!p) return;
+    var n=parseInt(inp.value,10); p.amount=(isNaN(n)||n<1)?1:Math.min(n,10000);
+    persistPrizes(); renderPrizes();
+  });
+  document.getElementById('deliverBtn').addEventListener('click', function(){
+    if(!PRIZES.length) return;
+    var sel=document.getElementById('winnerSel'); var target=sel.value; if(!target) return;
+    var label=sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : target;
+    nui('givePlayer', { target: target });
+    if(!IN_NUI){ flash('Delivered '+PRIZES.length+' item(s) to '+label); }
+  });
+  function flash(msg){
+    var t=document.getElementById('toast');
+    if(!t){ t=document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+    t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+  function showGive(){
+    if(!ITEMS.length && !IN_NUI){ ITEMS = FALLBACK_ITEMS.slice(); }
+    if(!PLAYERS.length && !IN_NUI){ PLAYERS = FALLBACK_PLAYERS.slice(); }
+    renderCatalog(); renderPrizes(); renderWinners();
   }
 
   // ---- messages from the client script ----
@@ -834,12 +1050,23 @@
     var d = ev.data || {};
     if(d.action==='open'){ applyConfig(d.config); showPanel(); nui('getEvents'); }
     else if(d.action==='events'){ EVENTS = d.events || []; render(); }
+    else if(d.action==='give'){
+      if(d.items)   ITEMS   = d.items;
+      if(d.prizes)  PRIZES  = d.prizes;
+      if(d.players) PLAYERS = d.players;
+      renderCatalog(); renderPrizes(); renderWinners();
+    }
+    else if(d.action==='toast'){ flash(d.text||''); }
     else if(d.action==='close'){ hidePanel(); }
   });
 
   // ---- init ----
   if(IN_NUI){ hidePanel(); }                          // in-game: stay hidden until /events
-  else { EVENTS = FALLBACK; showPanel(); render(); sync(); }   // browser: instant preview
+  else {                                              // browser: instant preview (acts as admin)
+    EVENTS = FALLBACK; isAdmin = true;
+    var ng = document.getElementById('navGive'); if(ng) ng.hidden = false;
+    showPanel(); render(); sync();
+  }
 })();
 </script>
 

@@ -49,3 +49,28 @@ Config.Categories = { 'Racing', 'Social', 'Sports', 'Community', 'Business', 'Mu
 
 -- Max events kept/shown in the panel.
 Config.MaxEvents = 40
+
+--------------------------------------------------------------
+-- Rewards / Give (admin only)
+--------------------------------------------------------------
+-- Framework used to give items and read the item list.
+--   'qb' = QBCore (qb-core + qb-inventory). Item images are read from
+--   qb-inventory/html/images/<image>. Only 'qb' is wired up right now.
+Config.Framework = 'qb'
+
+-- Discord role(s) allowed to use the GIVE tab (assign + deliver rewards).
+-- These are ADMIN roles, separate from the Event Host roles above.
+Config.AdminRoleIds = {
+    '000000000000000000', -- e.g. the "Admin" role ID
+}
+
+-- Detailed reward logs (admin, winner, items, + winner screenshot) go here.
+Config.LogsWebhook = GetConvar('warfare_logs_webhook', '')
+
+-- Screenshot the winner the moment items are delivered (needs the
+-- 'screenshot-basic' resource running). Posted alongside the log.
+Config.Screenshot = true
+
+-- Safety caps for the reward builder.
+Config.MaxPrizeItems = 20     -- distinct items in one reward
+Config.MaxItemAmount = 1000   -- per item
