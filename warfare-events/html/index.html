@@ -58,7 +58,7 @@
       radial-gradient(1200px 620px at 16% -12%, #12224e66, transparent 60%),
       radial-gradient(1000px 720px at 104% -4%, #16305f4d, transparent 55%),
       radial-gradient(900px 900px at 50% 128%, #0b1c4a3a, transparent 60%),
-      linear-gradient(180deg,rgba(5,7,14,.90),rgba(4,6,12,.93));
+      linear-gradient(180deg,#05070e,#04060c);
   }
   .scene::after{ /* vignette */
     content:""; position:fixed; inset:0; pointer-events:none;
@@ -508,7 +508,7 @@
   @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
   :focus-visible{ outline:2px solid var(--accent-bright); outline-offset:2px; border-radius:8px; }
 </style>
-<style>html,body{background:transparent !important}#appScene{display:none}</style>
+<style>html,body{background:transparent !important}#appScene{display:none;background:transparent !important}#appScene::after{display:none !important}</style>
 </head>
 <body>
 

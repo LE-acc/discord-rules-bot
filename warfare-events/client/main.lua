@@ -5,10 +5,21 @@
 
 local isOpen = false
 
-local function notify(msg)
-    SetNotificationTextEntry('STRING')
-    AddTextComponentSubstringPlayerName(msg)
-    DrawNotification(false, true)
+-- QBCore (for nice notifications); falls back to a native GTA notification.
+local QBCore = nil
+CreateThread(function()
+    local ok, core = pcall(function() return exports['qb-core']:GetCoreObject() end)
+    if ok then QBCore = core end
+end)
+
+local function notify(msg, ntype)
+    if QBCore then
+        QBCore.Functions.Notify(msg, ntype or 'primary')
+    else
+        SetNotificationTextEntry('STRING')
+        AddTextComponentSubstringPlayerName(msg)
+        DrawNotification(false, true)
+    end
 end
 
 -- /events -> ask the server whether we're allowed, then open
@@ -20,7 +31,7 @@ end, false)
 -- server's answer to canOpen
 RegisterNetEvent('warfare:openResult', function(canOpen, isAdmin, user)
     if not canOpen then
-        notify('~r~Warfare Events~s~\nYou need the Event Host role to use this.')
+        notify('You need the Event Host role to use this.', 'error')
         return
     end
     isOpen = true
@@ -47,8 +58,14 @@ RegisterNetEvent('warfare:giveData', function(data)
     SendNUIMessage({ action = 'give', items = data.items, prizes = data.prizes, players = data.players })
 end)
 
-RegisterNetEvent('warfare:notify', function(msg)
-    notify(msg)
+-- in-game notification
+RegisterNetEvent('warfare:notify', function(msg, ntype)
+    notify(msg, ntype)
+end)
+
+-- in-panel toast (shows while the panel is open)
+RegisterNetEvent('warfare:toast', function(msg)
+    SendNUIMessage({ action = 'toast', text = msg })
 end)
 
 --------------------------------------------------------------

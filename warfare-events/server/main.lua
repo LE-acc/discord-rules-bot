@@ -301,11 +301,11 @@ RegisterNetEvent('warfare:createEvent', function(data)
     if type(data) ~= 'table' then return end
     fetchMember(src, function(canOpen, _, user)
         if not canOpen then
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\nYou are not allowed to post events.')
+            TriggerClientEvent('warfare:notify', src, 'You are not allowed to post events.', 'error')
             return
         end
         if not data.title or tostring(data.title):gsub('%s', '') == '' then
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\nAn event title is required.')
+            TriggerClientEvent('warfare:notify', src, 'An event title is required.', 'error')
             return
         end
         local ev = buildEvent(data, user)
@@ -313,7 +313,7 @@ RegisterNetEvent('warfare:createEvent', function(data)
         while #Events > Config.MaxEvents do table.remove(Events) end
         saveEvents()
         postEmbed(ev)
-        TriggerClientEvent('warfare:notify', src, '~b~Warfare Events~s~\nEvent posted to Discord.')
+        TriggerClientEvent('warfare:notify', src, 'Event posted to Discord.', 'success')
         TriggerClientEvent('warfare:sendEvents', -1, displayList())
     end)
 end)
@@ -350,7 +350,7 @@ RegisterNetEvent('warfare:givePlayer', function(data)
     if type(data) ~= 'table' then return end
     fetchMember(src, function(_, isAdmin, user)
         if not isAdmin then
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\nYou are not allowed to give items.')
+            TriggerClientEvent('warfare:notify', src, 'You are not allowed to give items.', 'error')
             return
         end
         local target = tonumber(data.target)
@@ -359,25 +359,27 @@ RegisterNetEvent('warfare:givePlayer', function(data)
         local discordId = getDiscordId(src)
         local prizeList = (discordId and Prizes[discordId]) or {}
         if #prizeList == 0 then
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\nSelect at least one item first.')
+            TriggerClientEvent('warfare:notify', src, 'Select at least one item first.', 'error')
             return
         end
         local targetName = GetPlayerName(target)
         if not targetName then
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\nThat player is not online.')
+            TriggerClientEvent('warfare:notify', src, 'That player is not online.', 'error')
             return
         end
 
         local ok, reason = givePrizesTo(target, prizeList)
         if not ok then
             local msg = (reason == 'offline') and 'That player is not online.' or 'Inventory system not ready.'
-            TriggerClientEvent('warfare:notify', src, '~r~Warfare Events~s~\n' .. msg)
+            TriggerClientEvent('warfare:notify', src, msg, 'error')
             return
         end
 
         sendGiveLog(user, target, targetName, prizeList)
-        TriggerClientEvent('warfare:notify', src, ('~b~Warfare Events~s~\nDelivered %d item(s) to %s.'):format(#prizeList, targetName))
-        TriggerClientEvent('warfare:notify', target, '~g~Warfare Events~s~\nYou received an event reward!')
+        local doneMsg = ('Delivered %d item(s) to %s.'):format(#prizeList, targetName)
+        TriggerClientEvent('warfare:notify', src, doneMsg, 'success')
+        TriggerClientEvent('warfare:toast',  src, doneMsg)
+        TriggerClientEvent('warfare:notify', target, 'You received an event reward!', 'success')
     end)
 end)
 
