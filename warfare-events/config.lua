@@ -19,6 +19,33 @@ Config.PanelTitle = 'Warfare Events'
 Config.Logo = ''
 
 --------------------------------------------------------------
+-- Notifications (client-side)
+--  All in-game messages (events, give, errors) go through here.
+--  Uses your standalone 'notify' resource; if its call differs, just fix the
+--  ONE line marked below. A QBCore/native fallback keeps messages showing.
+--------------------------------------------------------------
+Config.Notify = function(msg, ntype)
+    ntype = ntype or 'primary'
+
+    -- >>> YOUR notify script <<<  (tries the common export signatures)
+    if GetResourceState('notify') == 'started' then
+        local exp = exports['notify']
+        if pcall(function() exp:Alert('Warfare Events', msg, 5000, ntype) end) then return end
+        if pcall(function() exp:Notify(msg, ntype) end) then return end
+        if pcall(function() exp:SendNotification(msg, ntype) end) then return end
+    end
+
+    -- fallbacks (so a message always appears)
+    if GetResourceState('qb-core') == 'started' then
+        exports['qb-core']:GetCoreObject().Functions.Notify(msg, ntype)
+        return
+    end
+    SetNotificationTextEntry('STRING')
+    AddTextComponentSubstringPlayerName(msg)
+    DrawNotification(false, true)
+end
+
+--------------------------------------------------------------
 -- Discord — ROLE GATE (who can open the panel / post events)
 --------------------------------------------------------------
 -- A bot is required to read a member's roles. Invite a bot to your guild,

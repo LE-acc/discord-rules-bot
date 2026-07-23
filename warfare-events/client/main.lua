@@ -5,16 +5,10 @@
 
 local isOpen = false
 
--- QBCore (for nice notifications); falls back to a native GTA notification.
-local QBCore = nil
-CreateThread(function()
-    local ok, core = pcall(function() return exports['qb-core']:GetCoreObject() end)
-    if ok then QBCore = core end
-end)
-
+-- Shows an in-game message through Config.Notify (your 'notify' script).
 local function notify(msg, ntype)
-    if QBCore then
-        QBCore.Functions.Notify(msg, ntype or 'primary')
+    if Config.Notify then
+        Config.Notify(msg, ntype)
     else
         SetNotificationTextEntry('STRING')
         AddTextComponentSubstringPlayerName(msg)
