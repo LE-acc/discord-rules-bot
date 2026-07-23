@@ -68,8 +68,8 @@
   /* ============ APP PANEL ============ */
   .app{
     position:relative; z-index:1;
-    width:min(1320px,97%);
-    height:min(820px,93vh);
+    width:min(1920px,98%);
+    height:96vh;
     display:grid; grid-template-columns:264px 1fr;
     background:linear-gradient(180deg,#0a0f1cf5,#080c17f7);
     border:1px solid var(--border);
@@ -210,7 +210,7 @@
   .icon-btn svg{ width:18px; height:18px; }
 
   /* ============ CONTENT ============ */
-  .content{ padding:24px; overflow:auto; flex:1; }
+  .content{ padding:24px; overflow:auto; flex:1; display:flex; flex-direction:column; }
   .content-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:20px; }
   .content-head h2{ margin:0; font-size:34px; letter-spacing:-.02em; line-height:1; text-wrap:balance; }
   .content-head .sub{ margin:9px 0 0; font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--text-mute); }
@@ -225,7 +225,9 @@
   .chip.active{ color:#fff; background:linear-gradient(180deg,#1a2954,#132043); border-color:#335198; box-shadow:0 0 0 1px #3a6dff33; }
 
   /* ---- event grid ---- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(292px,1fr)); gap:18px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(292px,1fr)); gap:18px; flex:1; align-content:start; }
+  .grid.is-empty{ align-content:stretch; }
+  #giveView{ flex:1; }
 
   .card{
     display:flex; flex-direction:column;
@@ -284,7 +286,8 @@
   /* empty state (reference) */
   .empty{
     border:1px dashed var(--border); border-radius:16px; padding:52px 20px; text-align:center;
-    background:#0b1428;
+    background:#0b1428; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .empty b{ display:block; font-size:16px; margin-bottom:6px; }
   .empty span{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--text-mute); }
@@ -808,9 +811,11 @@
   function render(){
     var list = EVENTS.filter(function(e){ return activeCat==='all' || (e.cat||e.category)===activeCat; });
     if(!list.length){
+      grid.classList.add('is-empty');
       grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><b>No events yet.</b><span>Be the first to post one</span></div>';
       return;
     }
+    grid.classList.remove('is-empty');
     grid.innerHTML = list.map(function(e,i){
       var cat = e.cat||e.category||'Social', meta = CATS[cat]||CATS.Social;
       return ''+
