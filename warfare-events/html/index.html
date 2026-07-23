@@ -70,7 +70,7 @@
     position:relative; z-index:1;
     width:min(1120px,86%);
     height:min(720px,85vh);
-    display:grid; grid-template-columns:248px 1fr;
+    display:grid; grid-template-columns:248px 1fr; grid-template-rows:minmax(0,1fr);
     background:linear-gradient(180deg,#0a0f1cf5,#080c17f7);
     border:1px solid var(--border);
     border-radius:22px;
@@ -159,7 +159,7 @@
   .profile .who .role svg{ width:11px; height:11px; }
 
   /* ============ MAIN ============ */
-  .main{ display:flex; flex-direction:column; min-width:0; }
+  .main{ display:flex; flex-direction:column; min-width:0; min-height:0; }
 
   .topbar{
     display:flex; align-items:center; gap:14px;
@@ -209,7 +209,7 @@
   .icon-btn svg{ width:18px; height:18px; }
 
   /* ============ CONTENT ============ */
-  .content{ padding:24px; overflow:auto; flex:1; display:flex; flex-direction:column; }
+  .content{ padding:24px; overflow-y:auto; overflow-x:hidden; flex:1; min-height:0; }
   .content-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:20px; }
   .content-head h2{ margin:0; font-size:34px; letter-spacing:-.02em; line-height:1; text-wrap:balance; }
   .content-head .sub{ margin:9px 0 0; font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:var(--text-mute); }
@@ -224,9 +224,7 @@
   .chip.active{ color:#fff; background:linear-gradient(180deg,#1a2954,#132043); border-color:#335198; box-shadow:0 0 0 1px #3a6dff33; }
 
   /* ---- event grid ---- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(292px,1fr)); gap:18px; flex:1; align-content:start; }
-  .grid.is-empty{ align-content:stretch; }
-  #giveView{ flex:1; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(292px,1fr)); gap:18px; }
 
   .card{
     display:flex; flex-direction:column;
@@ -285,7 +283,7 @@
   /* empty state (reference) */
   .empty{
     border:1px dashed var(--border); border-radius:16px; padding:52px 20px; text-align:center;
-    background:#0b1428; height:100%;
+    background:#0b1428; min-height:44vh;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
   }
   .empty b{ display:block; font-size:16px; margin-bottom:6px; }
@@ -539,20 +537,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           <span class="lbl">Discovery</span>
         </button>
-        <button class="nav-item" data-view="hosted">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
-          <span class="lbl">Hosted by me</span>
-        </button>
         <button class="nav-item" data-view="give" id="navGive" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8S10.5 3 8 3.5 6.5 7.5 12 8zM12 8s1.5-5 4-4.5S17.5 7.5 12 8z"/></svg>
           <span class="lbl">Give</span>
         </button>
       </nav>
-
-      <div class="side-hint">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h6"/></svg>
-        <p>Open this panel in-game with <kbd>/events</kbd> — access limited to the <b style="color:#c6ccff">Event Host</b> Discord role.</p>
-      </div>
 
       <div class="spacer"></div>
 
@@ -575,7 +564,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>
           <input placeholder="Search activities…" aria-label="Search activities">
         </div>
-        <div class="cmd-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h6"/></svg>Type <b>/events</b></div>
         <button class="btn-primary" id="openModal">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           <span class="lbl">Post new event</span>
@@ -810,11 +798,9 @@
   function render(){
     var list = EVENTS.filter(function(e){ return activeCat==='all' || (e.cat||e.category)===activeCat; });
     if(!list.length){
-      grid.classList.add('is-empty');
       grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><b>No events yet.</b><span>Be the first to post one</span></div>';
       return;
     }
-    grid.classList.remove('is-empty');
     grid.innerHTML = list.map(function(e,i){
       var cat = e.cat||e.category||'Social', meta = CATS[cat]||CATS.Social;
       return ''+
@@ -834,7 +820,6 @@
           '</div>'+
           '<div class="card-foot">'+
             '<div class="host"><span class="mini">'+esc(e.hi||initials(e.host))+'</span>Hosted by '+esc(e.host||'—')+'</div>'+
-            '<button class="view-link">View '+arrow()+'</button>'+
           '</div>'+
         '</div>'+
       '</article>';
@@ -852,7 +837,6 @@
   // ---- sidebar nav ----
   var VIEWS = {
     discovery:{ t:'Trending Now', s:'Discover what the city is doing' },
-    hosted:   { t:'Hosted by me', s:'Events you posted to Discord' },
     give:     { t:'Item Rewards', s:'Assign a prize and deliver it to the winner' }
   };
   function setView(view){
@@ -947,7 +931,7 @@
   }
 
   // ================= GIVE (admin item rewards) =================
-  var ITEMS = [], PRIZES = [], PLAYERS = [], isAdmin = false;
+  var ITEMS = [], PRIZES = [], PLAYERS = [], isAdmin = false, giveLoaded = false;
   var giveView   = document.getElementById('giveView');
   var itemListEl = document.getElementById('itemList');
   var prizeListEl= document.getElementById('prizeList');
@@ -972,7 +956,7 @@
     var list = ITEMS.filter(function(it){ return !q || (it.label||'').toLowerCase().indexOf(q)>=0 || (it.name||'').toLowerCase().indexOf(q)>=0; });
     document.getElementById('itemCount').textContent = ITEMS.length ? (list.length+' of '+ITEMS.length) : '';
     var picked = {}; PRIZES.forEach(function(p){ picked[p.name]=true; });
-    if(!ITEMS.length){ itemListEl.innerHTML = '<div class="prize-empty" style="grid-column:1/-1">Loading items from the inventory…</div>'; return; }
+    if(!ITEMS.length){ itemListEl.innerHTML = '<div class="prize-empty" style="grid-column:1/-1">'+(giveLoaded ? 'No items found. Make sure <b>qb-core</b> &amp; <b>qb-inventory</b> are running.' : 'Loading items…')+'</div>'; return; }
     itemListEl.innerHTML = list.slice(0,300).map(function(it){
       return '<button class="item'+(picked[it.name]?' picked':'')+'" data-name="'+esc(it.name)+'">'+
         '<span class="thumb">'+thumbHtml(it)+'</span>'+
@@ -1055,9 +1039,10 @@
     if(d.action==='open'){ applyConfig(d.config); showPanel(); nui('getEvents'); }
     else if(d.action==='events'){ EVENTS = d.events || []; render(); }
     else if(d.action==='give'){
-      if(d.items)   ITEMS   = d.items;
-      if(d.prizes)  PRIZES  = d.prizes;
-      if(d.players) PLAYERS = d.players;
+      giveLoaded = true;
+      ITEMS   = d.items   || [];
+      PRIZES  = d.prizes  || [];
+      PLAYERS = d.players || [];
       renderCatalog(); renderPrizes(); renderWinners();
     }
     else if(d.action==='toast'){ flash(d.text||''); }

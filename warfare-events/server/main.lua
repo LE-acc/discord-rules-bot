@@ -324,12 +324,18 @@ end)
 RegisterNetEvent('warfare:getGive', function()
     local src = source
     fetchMember(src, function(_, isAdmin)
-        if not isAdmin then return end
+        if not isAdmin then
+            print(('[warfare-events] getGive: player %s is not admin — Give data not sent.'):format(src))
+            return
+        end
         local discordId = getDiscordId(src)
+        local items = buildItemCatalog()
+        local players = onlinePlayers()
+        print(('[warfare-events] getGive -> %d items, %d players (qb-core loaded: %s)'):format(#items, #players, tostring(QBCore ~= nil)))
         TriggerClientEvent('warfare:giveData', src, {
-            items   = buildItemCatalog(),
+            items   = items,
             prizes  = (discordId and Prizes[discordId]) or {},
-            players = onlinePlayers(),
+            players = players,
         })
     end)
 end)
