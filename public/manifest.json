@@ -1,0 +1,26 @@
+{
+  "name": "NutriAI — AI Nutrition Coach",
+  "short_name": "NutriAI",
+  "description": "Log meals by chat, photo, or voice. Understands Saudi & Gulf dialects and estimates calories & macros instantly.",
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#060a12",
+  "theme_color": "#16c26b",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["health", "fitness", "lifestyle", "food"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "AI Coach", "short_name": "Chat", "url": "/chat", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Dashboard", "short_name": "Home", "url": "/dashboard", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Log weight", "short_name": "Weight", "url": "/weight" }
+  ]
+}

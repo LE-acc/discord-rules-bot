@@ -1,0 +1,78 @@
+import type { Achievement } from '@/types';
+
+export function seedAchievements(): Achievement[] {
+  return [
+    {
+      id: 'first-log',
+      title: 'First Bite',
+      titleAr: 'أول تسجيل',
+      description: 'Logged your first meal',
+      descriptionAr: 'سجّلت أول وجبة',
+      emoji: '🍽️',
+      progress: 0,
+    },
+    {
+      id: 'protein-hero',
+      title: 'Protein Hero',
+      titleAr: 'بطل البروتين',
+      description: 'Hit your protein goal',
+      descriptionAr: 'حققت هدف البروتين',
+      emoji: '💪',
+      progress: 0,
+    },
+    {
+      id: 'hydrated',
+      title: 'Hydration Master',
+      titleAr: 'سيّد الترطيب',
+      description: 'Reached your water goal',
+      descriptionAr: 'وصلت لهدف الماء',
+      emoji: '💧',
+      progress: 0,
+    },
+    {
+      id: 'streak-7',
+      title: '7-Day Streak',
+      titleAr: 'سلسلة ٧ أيام',
+      description: 'Logged meals 7 days in a row',
+      descriptionAr: 'سجّلت وجبات ٧ أيام متتالية',
+      emoji: '🔥',
+      progress: 0,
+    },
+    {
+      id: 'first-workout',
+      title: 'Move It',
+      titleAr: 'تحرّك',
+      description: 'Logged your first workout',
+      descriptionAr: 'سجّلت أول تمرين',
+      emoji: '🏋️',
+      progress: 0,
+    },
+    {
+      id: 'weight-log',
+      title: 'On the Scale',
+      titleAr: 'على الميزان',
+      description: 'Recorded a weight entry',
+      descriptionAr: 'سجّلت وزنك',
+      emoji: '⚖️',
+      progress: 0,
+    },
+    {
+      id: 'faster',
+      title: 'Fasting Focus',
+      titleAr: 'صيام بتركيز',
+      description: 'Completed a fasting window',
+      descriptionAr: 'أكملت نافذة صيام',
+      emoji: '⏳',
+      progress: 0,
+    },
+    {
+      id: 'goal-crusher',
+      title: 'Goal Crusher',
+      titleAr: 'محطّم الأهداف',
+      description: 'Hit all daily goals in one day',
+      descriptionAr: 'حققت كل الأهداف في يوم',
+      emoji: '🏆',
+      progress: 0,
+    },
+  ];
+}
