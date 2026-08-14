@@ -22,9 +22,8 @@ local function spawnFloorVehicle(dealership, slotIndex, model)
     FloorVehicles[dealership] = FloorVehicles[dealership] or {}
     FloorVehicles[dealership][slotIndex] = veh
 
-    exports.ox_target:addLocalEntity(veh, {
+    AddEntityInteraction(veh, {
         {
-            name = 'carshowroom_floor_' .. dealership .. '_' .. slotIndex,
             icon = 'fa-solid fa-car',
             label = 'الاطلاع على السيارة',
             onSelect = function()
@@ -37,7 +36,7 @@ end
 local function despawnFloorVehicle(dealership, slotIndex)
     local veh = FloorVehicles[dealership] and FloorVehicles[dealership][slotIndex]
     if veh and DoesEntityExist(veh) then
-        exports.ox_target:removeLocalEntity(veh)
+        RemoveEntityInteraction(veh)
         DeleteEntity(veh)
     end
     if FloorVehicles[dealership] then FloorVehicles[dealership][slotIndex] = nil end

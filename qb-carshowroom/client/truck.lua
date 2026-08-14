@@ -7,7 +7,7 @@ CreateThread(function()
         SetEntityInvincible(ped, true)
         SetBlockingOfNonTemporaryEvents(ped, true)
 
-        exports.ox_target:addLocalEntity(ped, {
+        AddEntityInteraction(ped, {
             {
                 icon = 'fa-solid fa-screwdriver-wrench',
                 label = 'تركيب تعديل الشاحنة (رفع البضاعة)',

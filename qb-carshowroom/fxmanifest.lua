@@ -4,7 +4,7 @@ lua54 'yes'
 
 name 'qb-carshowroom'
 author 'built for le-acc'
-description 'Multi-dealership vehicle showroom system (QBCore + ox_lib + ox_target + oxmysql)'
+description 'Multi-dealership vehicle showroom system (QBCore + ox_lib + oxmysql)'
 version '1.0.0'
 
 shared_scripts {
@@ -14,6 +14,7 @@ shared_scripts {
 }
 
 client_scripts {
+    'client/interact_bridge.lua', -- swap this file's 3 functions for your "interact" script's API; nothing else needs to change
     'client/floor.lua',
     'client/warehouse.lua',
     'client/truck.lua',
@@ -35,6 +36,7 @@ server_scripts {
 dependencies {
     'qb-core',
     'ox_lib',
-    'ox_target',
     'oxmysql',
+    -- your "interact" script isn't listed here since we don't know its resource
+    -- name; add it once client/interact_bridge.lua is wired to it.
 }

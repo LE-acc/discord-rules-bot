@@ -192,15 +192,11 @@ end
 
 CreateThread(function()
     for dealership, config in pairs(Config.Dealerships) do
-        exports.ox_target:addSphereZone({
-            coords = config.laptop.xyz,
-            radius = 1.0,
-            options = {
-                {
-                    icon = 'fa-solid fa-laptop',
-                    label = 'فتح لابتوب المعرض',
-                    onSelect = function() openLaptop(dealership) end,
-                },
+        AddZoneInteraction(config.laptop.xyz, 1.0, {
+            {
+                icon = 'fa-solid fa-laptop',
+                label = 'فتح لابتوب المعرض',
+                onSelect = function() openLaptop(dealership) end,
             },
         })
     end

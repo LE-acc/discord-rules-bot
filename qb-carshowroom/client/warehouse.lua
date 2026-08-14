@@ -24,9 +24,8 @@ local function spawnWarehouseUnit(dealership, config, unit)
     SetVehicleOnGroundProperly(veh)
     SetEntityInvincible(veh, true)
 
-    exports.ox_target:addLocalEntity(veh, {
+    AddEntityInteraction(veh, {
         {
-            name = 'carshowroom_wh_unit_' .. unit.id,
             icon = 'fa-solid fa-magnifying-glass',
             label = 'تفاصيل السيارة',
             onSelect = function()
@@ -53,71 +52,71 @@ local function enterWarehouse(dealership)
     end
 end
 
+local function unloadUnitOption(dealership)
+    return {
+        icon = 'fa-solid fa-truck-ramp-box',
+        label = 'تفريغ سيارة من الشاحنة',
+        onSelect = function()
+            local ok, result = lib.callback.await('carshowroom:server:unloadUnit', false, dealership)
+            if not ok then
+                QBCore.Functions.Notify(result, 'error')
+                return
+            end
+            spawnWarehouseUnit(dealership, Config.Dealerships[dealership], {
+                id = 0, -- purely visual re-render; a fresh getWarehouseUnits call will replace targets on next entry
+                vehicle_model = result.model,
+                label = result.label,
+                class = Config.Dealerships[dealership].class,
+                mods_json = result.modsJson,
+                warehouse_slot = result.slot,
+            })
+            QBCore.Functions.Notify(('تم تفريغ %s بالمخزن'):format(result.label), 'success')
+        end,
+    }
+end
+
+local function moveToFloorOption(dealership)
+    return {
+        icon = 'fa-solid fa-arrow-up-from-bracket',
+        label = 'نقل سيارة للمعرض',
+        onSelect = function()
+            local rows = lib.callback.await('carshowroom:server:getListings', false, dealership)
+            local moveOptions = {}
+            for _, row in ipairs(rows) do
+                if row.warehouse_stock > 0 then
+                    table.insert(moveOptions, {
+                        title = row.label,
+                        description = ('بالمخزن: %s'):format(row.warehouse_stock),
+                        onSelect = function()
+                            local ok, msg = lib.callback.await('carshowroom:server:moveToFloor', false, dealership, row.id)
+                            QBCore.Functions.Notify(msg, ok and 'success' or 'error')
+                        end,
+                    })
+                end
+            end
+            if #moveOptions == 0 then
+                QBCore.Functions.Notify('ماعندك سيارات بالمخزن جاهزة للنقل', 'error')
+                return
+            end
+            lib.registerContext({ id = 'carshowroom_move_floor', title = 'نقل سيارة للمعرض', options = moveOptions })
+            lib.showContext('carshowroom_move_floor')
+        end,
+    }
+end
+
 CreateThread(function()
     for dealership, config in pairs(Config.Dealerships) do
-        exports.ox_target:addSphereZone({
-            coords = config.warehouse.entrance.xyz,
-            radius = 1.5,
-            options = {
-                {
-                    icon = 'fa-solid fa-warehouse',
-                    label = 'دخول مخزن ' .. config.label,
-                    onSelect = function() enterWarehouse(dealership) end,
-                },
+        AddZoneInteraction(config.warehouse.entrance.xyz, 1.5, {
+            {
+                icon = 'fa-solid fa-warehouse',
+                label = 'دخول مخزن ' .. config.label,
+                onSelect = function() enterWarehouse(dealership) end,
             },
         })
 
-        exports.ox_target:addSphereZone({
-            coords = config.warehouse.dropPoint.xyz,
-            radius = 2.0,
-            options = {
-                {
-                    icon = 'fa-solid fa-truck-ramp-box',
-                    label = 'تفريغ سيارة من الشاحنة',
-                    onSelect = function()
-                        local ok, result = lib.callback.await('carshowroom:server:unloadUnit', false, dealership)
-                        if not ok then
-                            QBCore.Functions.Notify(result, 'error')
-                            return
-                        end
-                        spawnWarehouseUnit(dealership, Config.Dealerships[dealership], {
-                            id = 0, -- purely visual re-render; a fresh getWarehouseUnits call will replace targets on next entry
-                            vehicle_model = result.model,
-                            label = result.label,
-                            class = Config.Dealerships[dealership].class,
-                            mods_json = result.modsJson,
-                            warehouse_slot = result.slot,
-                        })
-                        QBCore.Functions.Notify(('تم تفريغ %s بالمخزن'):format(result.label), 'success')
-                    end,
-                },
-                {
-                    icon = 'fa-solid fa-arrow-up-from-bracket',
-                    label = 'نقل سيارة للمعرض',
-                    onSelect = function()
-                        local rows = lib.callback.await('carshowroom:server:getListings', false, dealership)
-                        local moveOptions = {}
-                        for _, row in ipairs(rows) do
-                            if row.warehouse_stock > 0 then
-                                table.insert(moveOptions, {
-                                    title = row.label,
-                                    description = ('بالمخزن: %s'):format(row.warehouse_stock),
-                                    onSelect = function()
-                                        local ok, msg = lib.callback.await('carshowroom:server:moveToFloor', false, dealership, row.id)
-                                        QBCore.Functions.Notify(msg, ok and 'success' or 'error')
-                                    end,
-                                })
-                            end
-                        end
-                        if #moveOptions == 0 then
-                            QBCore.Functions.Notify('ماعندك سيارات بالمخزن جاهزة للنقل', 'error')
-                            return
-                        end
-                        lib.registerContext({ id = 'carshowroom_move_floor', title = 'نقل سيارة للمعرض', options = moveOptions })
-                        lib.showContext('carshowroom_move_floor')
-                    end,
-                },
-            },
+        AddZoneInteraction(config.warehouse.dropPoint.xyz, 2.0, {
+            unloadUnitOption(dealership),
+            moveToFloorOption(dealership),
         })
     end
 end)
